@@ -244,30 +244,43 @@ h6 {
 .loading {
   text-align: center;
   padding: 2rem;
-  color: #7f8c8d;
+  color: #4ecdc4;
   font-style: italic;
+  text-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 /* CV Typography */
 .cv-name {
   font-size: 2.5rem;
-  font-weight: 700;
-  color: #2c3e50;
+  font-weight: 800;
+  color: #ffffff;
   margin-bottom: 0.5rem;
   text-align: center;
+  text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .cv-title {
   font-size: 1.5rem;
-  color: #3498db;
+  color: #4ecdc4;
   text-align: center;
   margin-bottom: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+  text-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
 }
 
 .cv-contact {
   text-align: center;
-  color: #7f8c8d;
+  color: #b0b0b0;
   margin-bottom: 2rem;
   font-size: 1rem;
 }
