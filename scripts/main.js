@@ -154,12 +154,12 @@ class CVBuilder {
 
       // Render CV with separate TOC and content
       const renderedCV = this.renderer.renderCV(this.cvData);
-      
+
       // Add table of contents if available
       if (renderedCV.toc) {
         this.cvContent.appendChild(renderedCV.toc);
       }
-      
+
       // Add main content
       this.cvContent.appendChild(renderedCV.content);
     } catch (error) {

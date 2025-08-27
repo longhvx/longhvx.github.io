@@ -107,7 +107,7 @@ class CVRenderer {
 
     return {
       toc: toc,
-      content: cvContainer
+      content: cvContainer,
     };
   }
 
