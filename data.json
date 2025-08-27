@@ -60,6 +60,9 @@
               }
             },
             {
+              "type": "divider"
+            },
+            {
               "type": "paragraph",
               "text": {
                 "en": "{{bold('Back-End Development')}} (primary focus)"
@@ -97,6 +100,9 @@
               ]
             },
             {
+              "type": "divider"
+            },
+            {
               "type": "paragraph",
               "text": { "en": "{{bold('Front-End Development')}}" }
             },
@@ -130,6 +136,9 @@
                   "en": "Enhanced user experience through the integration of smooth and engaging animations using react-spring."
                 }
               ]
+            },
+            {
+              "type": "divider"
             },
             {
               "type": "list",
