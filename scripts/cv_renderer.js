@@ -17,6 +17,68 @@ class CVRenderer {
   }
 
   /**
+   * Generate table of contents from CV data
+   * @param {Object} cvData - CV data object
+   * @returns {HTMLElement} - Table of contents element
+   */
+  generateTableOfContents(cvData) {
+    if (!cvData || !cvData.blocks) {
+      return null;
+    }
+
+    const tocContainer = document.createElement("div");
+    tocContainer.className = "cv-toc";
+
+    const tocTitle = document.createElement("h3");
+    tocTitle.textContent = "Table of Contents";
+    tocTitle.className = "toc-title";
+    tocContainer.appendChild(tocTitle);
+
+    const tocList = document.createElement("ul");
+    tocList.className = "toc-list";
+
+    // Find all sections
+    cvData.blocks.forEach((block) => {
+      if (block.type === "section" && block.title) {
+        const titleText = TextProcessor.getLocalizedText(
+          block.title,
+          this.currentLanguage
+        );
+        const sectionId = this.generateId(titleText);
+
+        const tocItem = document.createElement("li");
+        tocItem.className = "toc-item";
+
+        const tocLink = document.createElement("a");
+        tocLink.href = `#${sectionId}`;
+        tocLink.textContent = titleText;
+        tocLink.className = "toc-link";
+
+        tocItem.appendChild(tocLink);
+        tocList.appendChild(tocItem);
+      }
+    });
+
+    tocContainer.appendChild(tocList);
+    return tocContainer;
+  }
+
+  /**
+   * Generate a safe ID from text
+   * @param {string} text - Text to convert to ID
+   * @returns {string} - Safe ID string
+   */
+  generateId(text) {
+    if (!text) return "";
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim();
+  }
+
+  /**
    * Render complete CV from data
    * @param {Object} cvData - CV data object
    * @returns {HTMLElement} - Rendered CV container
@@ -28,6 +90,12 @@ class CVRenderer {
 
     const cvContainer = document.createElement("div");
     cvContainer.className = "cv-document";
+
+    // Generate and add table of contents
+    const toc = this.generateTableOfContents(cvData);
+    if (toc) {
+      cvContainer.appendChild(toc);
+    }
 
     // Render blocks
     if (Array.isArray(cvData.blocks)) {
@@ -208,12 +276,30 @@ class CVRenderer {
 
     // Render section title
     if (block.title) {
+      const titleText = TextProcessor.getLocalizedText(
+        block.title,
+        this.currentLanguage
+      );
+      const sectionId = this.generateId(titleText);
+
+      // Set section ID for hash linking
+      section.id = sectionId;
+
       const titleElement = TextProcessor.createElement(
         "h2",
         block.title,
         this.currentLanguage,
         { class: "section-title" }
       );
+
+      // Add hash link to title
+      const hashLink = document.createElement("a");
+      hashLink.href = `#${sectionId}`;
+      hashLink.className = "section-hash-link";
+      hashLink.innerHTML = "#";
+      hashLink.title = `Link to ${titleText}`;
+
+      titleElement.appendChild(hashLink);
       section.appendChild(titleElement);
     }
 
