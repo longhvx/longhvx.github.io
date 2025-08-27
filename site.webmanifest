@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
-  "categories": ["business", "productivity", "education"],
+  "categories": ["business", "productivity"],
   "icons": [
     {
       "src": "/favicon.ico",
