@@ -152,9 +152,16 @@ class CVBuilder {
       // Clear loading state
       this.cvContent.innerHTML = "";
 
-      // Render CV
+      // Render CV with separate TOC and content
       const renderedCV = this.renderer.renderCV(this.cvData);
-      this.cvContent.appendChild(renderedCV);
+      
+      // Add table of contents if available
+      if (renderedCV.toc) {
+        this.cvContent.appendChild(renderedCV.toc);
+      }
+      
+      // Add main content
+      this.cvContent.appendChild(renderedCV.content);
     } catch (error) {
       console.error("Error rendering CV:", error);
       this.showError("Failed to render CV. Please check the data structure.");

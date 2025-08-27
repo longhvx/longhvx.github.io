@@ -81,21 +81,19 @@ class CVRenderer {
   /**
    * Render complete CV from data
    * @param {Object} cvData - CV data object
-   * @returns {HTMLElement} - Rendered CV container
+   * @returns {Object} - Object containing toc and main content elements
    */
   renderCV(cvData) {
     if (!cvData || !cvData.blocks) {
       throw new Error("Invalid CV data structure");
     }
 
+    // Generate table of contents
+    const toc = this.generateTableOfContents(cvData);
+
+    // Create main document container
     const cvContainer = document.createElement("div");
     cvContainer.className = "cv-document";
-
-    // Generate and add table of contents
-    const toc = this.generateTableOfContents(cvData);
-    if (toc) {
-      cvContainer.appendChild(toc);
-    }
 
     // Render blocks
     if (Array.isArray(cvData.blocks)) {
@@ -107,7 +105,10 @@ class CVRenderer {
       });
     }
 
-    return cvContainer;
+    return {
+      toc: toc,
+      content: cvContainer
+    };
   }
 
   /**
