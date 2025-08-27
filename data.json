@@ -1,0 +1,189 @@
+{
+  "type": "document",
+  "blocks": [
+    {
+      "type": "header",
+      "name": { "en": "{{bold('VU HOANG LONG')}}" },
+      "title": { "en": "Senior Software Engineer" },
+      "contact": {
+        "email": { "en": "longhv.dev@gmail.com" },
+        "location": { "en": "Ho Chi Minh City" }
+      }
+    },
+    {
+      "type": "section",
+      "title": { "en": "Professional Summary" },
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "{{bold('Full-Stack Developer')}} (2019–present) specializing in {{bold('high-load microservices')}} and modern frontend development. Proven ability to {{bold('design scalable architectures, optimize performance, and deliver engaging UIs')}}. Passionate about {{bold('building systems that handle millions of users reliably')}}."
+          }
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "en": "Skills" },
+      "blocks": [
+        {
+          "type": "list",
+          "style": "bulleted",
+          "items": [
+            {
+              "en": "{{bold('Back-End Development')}}: {{bold('TypeScript/JavaScript')}}, {{bold('NestJS')}}, Express.js, HTTP API, WebSocket, SSE, {{bold('MongoDB')}}, {{bold('PostgreSQL')}}, MSSQL, {{bold('Redis')}}, {{bold('Kafka')}}, {{bold('RabbitMQ')}}, BullMQ."
+            },
+            {
+              "en": "{{bold('Front-End Development')}}: {{bold('React')}}, react-native, {{bold('MobX')}}, {{bold('zustand')}}, Ant Design, MUI, TailwindCSS, HTTP API, WebSocket, SSE, react-router, react-query, react-hook-form, react-spring, usehooks."
+            },
+            {
+              "en": "{{bold('Others')}}: Cloudflare, {{bold('Git')}}, GitLab CI, {{bold('Docker')}}, {{bold('docker-compose')}}, Nginx, Linux."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "en": "Professional Experience" },
+      "blocks": [
+        {
+          "type": "subsection",
+          "title": {
+            "en": "{{bold('Software Engineer')}} @ Confidential Company (01/2019–05/2025)"
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Project Objective')}}: Apply {{bold('microservices')}} to build a {{bold('scalable and high-performance online gaming platform')}}, integrating third-party games, supporting online payments, and providing {{bold('stable operations for a large user base')}}."
+              }
+            },
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Back-End Development')}} (primary focus)"
+              }
+            },
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Technologies Used')}}: TypeScript, NestJS, PostgreSQL, Redis, Kafka, RabbitMQ, Docker."
+              }
+            },
+            {
+              "type": "list",
+              "style": "bulleted",
+              "title": { "en": "{{bold('My Role')}}" },
+              "items": [
+                {
+                  "en": "Collaborated with stakeholders to define business requirements and translate them into {{bold('robust backend API designs')}} and {{bold('database schemas')}}."
+                },
+                {
+                  "en": "Designed and implemented a {{bold('DDD high-load microservices')}} backend architecture to {{bold('handle large volumes of concurrent users')}}."
+                },
+                {
+                  "en": "Created multi-stage Docker images for various services to support CI/CD workflows."
+                },
+                {
+                  "en": "Monitored backend performance; optimized query speed through PostgreSQL indexing and implemented batch inserts to improve write throughput."
+                },
+                {
+                  "en": "Applied backend performance enhancements; implemented rate limiting and Cloudflare protections to mitigate bot traffic and prevent DDoS attacks."
+                },
+                {
+                  "en": "Participated in incident response and bug fixing during live operations."
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "text": { "en": "{{bold('Front-End Development')}}" }
+            },
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Technologies Used')}}: TypeScript, ReactJS (with Vite), React Router, React Hook Form, HTTP API, WebSocket, SSE, zustand, TailwindCSS, react-spring, usehooks."
+              }
+            },
+            {
+              "type": "list",
+              "style": "bulleted",
+              "title": { "en": "{{bold('My Role')}}" },
+              "items": [
+                {
+                  "en": "Integrated UI components with {{bold('backend APIs')}}, ensuring seamless data flow and full application functionality."
+                },
+                {
+                  "en": "Implemented real-time features using {{bold('WebSocket and Server-Sent Events (SSE)')}}, significantly enhancing user engagement and responsiveness."
+                },
+                {
+                  "en": "Developed a highly {{bold('responsive')}} and navigable user interface using ReactJS and react-router, styled with TailwindCSS for consistent and adaptable layouts across various screen sizes."
+                },
+                {
+                  "en": "Streamlined form handling and improved data validation through the implementation of react-hook-form, leading to a more efficient and error-free user input process."
+                },
+                {
+                  "en": "{{bold('Managed application state')}} effectively using zustand, contributing to improved performance and simplified component logic."
+                },
+                {
+                  "en": "Enhanced user experience through the integration of smooth and engaging animations using react-spring."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "style": "bulleted",
+              "title": {
+                "en": "{{bold('Key Outcomes & Achievements')}}"
+              },
+              "items": [
+                {
+                  "en": "Successfully built and operated a scalable online gaming platform with {{bold('80,000 active users')}} and a peak {{bold('CCU of ~1,500')}}, capable of handling up to {{bold('6,000 requests per second')}}."
+                },
+                {
+                  "en": "Achieved {{bold('95% of requests responding under 200ms')}} through backend performance optimizations such as PostgreSQL indexing, batch inserts, and application-level as well as Cloudflare rate limiting to mitigate bot traffic and DDoS attacks."
+                },
+                {
+                  "en": "Delivered a {{bold('secure, responsive, and user-friendly UI/UX')}} with {{bold('real-time updates')}} powered by {{bold('WebSocket and SSE')}}, ensuring seamless integration with backend systems."
+                },
+                {
+                  "en": "Enhanced user engagement and responsiveness through smooth animations, efficient form handling, and optimized application state management."
+                },
+                {
+                  "en": "Provided a fully integrated and interactive cross-device experience, combining high-performance backend architecture with a modern, intuitive front-end."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "en": "Education" },
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "{{bold('Bachelor of Software Engineering')}} @ Thai Nguyen University (2018–2021)"
+          }
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": { "en": "Languages" },
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": { "en": "{{bold('Vietnamese')}}: Native" }
+        },
+        {
+          "type": "paragraph",
+          "text": { "en": "{{bold('English')}}: Professional" }
+        }
+      ]
+    }
+  ]
+}

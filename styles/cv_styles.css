@@ -1,0 +1,334 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* CV Container */
+.cv-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+}
+
+/* Header Controls */
+.cv-header-controls {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1rem 2rem;
+  border-bottom: 3px solid #3498db;
+}
+
+.controls-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.language-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.language-select {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.action-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+}
+
+/* CV Content */
+.cv-content {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+/* CV Typography */
+.cv-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.cv-title {
+  font-size: 1.5rem;
+  color: #3498db;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.cv-contact {
+  text-align: center;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+/* Section Styles */
+.cv-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Subsection Styles */
+.cv-subsection {
+  margin-bottom: 1.5rem;
+}
+
+.subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+}
+
+/* Paragraph Styles */
+.cv-paragraph {
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+/* List Styles */
+.cv-list {
+  margin-bottom: 1rem;
+}
+
+.cv-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.cv-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.cv-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #3498db;
+  font-weight: bold;
+}
+
+.list-title {
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+}
+
+/* Divider */
+.cv-divider {
+  height: 2px;
+  background-color: #ecf0f1;
+  margin: 2rem 0;
+  border-radius: 1px;
+}
+
+/* Text Formatting */
+strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+u {
+  text-decoration: underline;
+  text-decoration-color: #3498db;
+  text-decoration-thickness: 2px;
+}
+
+/* Footer */
+.cv-footer {
+  background-color: #ecf0f1;
+  padding: 1rem 2rem;
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  border-top: 1px solid #bdc3c7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cv-content {
+    padding: 1rem;
+  }
+
+  .cv-name {
+    font-size: 2rem;
+  }
+
+  .cv-title {
+    font-size: 1.2rem;
+  }
+
+  .controls-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .language-controls {
+    flex-shrink: 0;
+  }
+
+  .action-controls {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .cv-header-controls {
+    padding: 1rem;
+  }
+
+  .cv-content {
+    padding: 0.5rem;
+  }
+
+  .cv-name {
+    font-size: 1.8rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .controls-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .language-controls {
+    flex-shrink: 0;
+  }
+
+  .action-controls {
+    flex-shrink: 0;
+  }
+
+  .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .language-select {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .cv-container {
+    box-shadow: none;
+    max-width: none;
+  }
+
+  .cv-header-controls {
+    display: none;
+  }
+
+  .cv-footer {
+    display: none;
+  }
+
+  .cv-content {
+    padding: 0;
+  }
+
+  .cv-name {
+    font-size: 2.2rem;
+  }
+
+  .cv-title {
+    font-size: 1.3rem;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  /* Ensure page breaks don't occur in the middle of sections */
+  .cv-section {
+    page-break-inside: avoid;
+  }
+
+  .cv-subsection {
+    page-break-inside: avoid;
+  }
+}

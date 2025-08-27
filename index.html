@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="VU HOANG LONG - Senior Software Engineer CV"
+    />
+    <meta
+      name="keywords"
+      content="cv, resume, software-engineer, full-stack developer"
+    />
+    <title>VU HOANG LONG - Senior Software Engineer CV</title>
+    <link rel="stylesheet" href="styles/cv_styles.css" />
+  </head>
+  <body>
+    <div class="cv-container">
+      <!-- Header Controls -->
+      <header class="cv-header-controls">
+        <div class="controls-wrapper">
+          <div class="language-controls">
+            <label for="language-select">Language:</label>
+            <select id="language-select" class="language-select">
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="action-controls">
+            <button id="download-pdf-btn" class="btn btn-secondary">
+              Download PDF
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- CV Content -->
+      <main class="cv-content" id="cv-content">
+        <!-- CV will be rendered here -->
+        <div class="loading">Loading CV...</div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/text_processor.js"></script>
+    <script src="scripts/cv_renderer.js"></script>
+    <script src="scripts/main.js"></script>
+  </body>
+</html>
