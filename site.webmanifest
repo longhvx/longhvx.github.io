@@ -1,11 +1,11 @@
 {
   "name": "VU HOANG LONG - Senior Software Engineer CV",
   "short_name": "VU HOANG LONG CV",
-  "description": "Senior Software Engineer with 6+ years of experience in full-stack development, specializing in TypeScript, NestJS, React, and microservices architecture.",
+  "description": "Senior Software Engineer with 6+ years of experience in full-stack development, specializing in TypeScript, NestJS, React, and microservices. Expert in high-load systems handling 80,000+ active users.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#3498db",
+  "background_color": "#f8f9fa",
+  "theme_color": "#2c3e50",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
@@ -73,7 +73,7 @@
   "screenshots": [
     {
       "src": "/images/preview.png",
-      "sizes": "1200x630",
+      "sizes": "1420x694",
       "type": "image/png",
       "form_factor": "wide",
       "label": "CV Preview"
