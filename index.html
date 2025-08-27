@@ -3,30 +3,117 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="VU HOANG LONG - Senior Software Engineer CV"
-    />
-    <meta
-      name="keywords"
-      content="cv, resume, software-engineer, full-stack developer"
-    />
-    <title>VU HOANG LONG - Senior Software Engineer CV</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>VU HOANG LONG - Senior Software Engineer | Full-Stack Developer CV</title>
+    <meta name="title" content="VU HOANG LONG - Senior Software Engineer | Full-Stack Developer CV" />
+    <meta name="description" content="Senior Software Engineer with 6+ years of experience in full-stack development, specializing in TypeScript, NestJS, React, and microservices architecture. Expert in high-load systems and modern web technologies." />
+    <meta name="keywords" content="software engineer, full-stack developer, typescript, nestjs, react, microservices, mongodb, postgresql, redis, kafka, docker, senior developer, vietnam, ho chi minh city" />
+    <meta name="author" content="VU HOANG LONG" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-domain.com/" />
+    <meta property="og:title" content="VU HOANG LONG - Senior Software Engineer | Full-Stack Developer CV" />
+    <meta property="og:description" content="Senior Software Engineer with 6+ years of experience in full-stack development, specializing in TypeScript, NestJS, React, and microservices architecture." />
+    <meta property="og:image" content="https://your-domain.com/images/cv-preview.jpg" />
+    <meta property="og:site_name" content="VU HOANG LONG CV" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://your-domain.com/" />
+    <meta property="twitter:title" content="VU HOANG LONG - Senior Software Engineer | Full-Stack Developer CV" />
+    <meta property="twitter:description" content="Senior Software Engineer with 6+ years of experience in full-stack development, specializing in TypeScript, NestJS, React, and microservices architecture." />
+    <meta property="twitter:image" content="https://your-domain.com/images/cv-preview.jpg" />
+    
+    <!-- LinkedIn -->
+    <meta property="linkedin:owner" content="your-linkedin-profile" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#3498db" />
+    <meta name="msapplication-TileColor" content="#3498db" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="VU HOANG LONG CV" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://your-domain.com/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="styles/cv_styles.css" as="style" />
+    <link rel="preload" href="scripts/main.js" as="script" />
+    
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="styles/cv_styles.css" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "VU HOANG LONG",
+      "jobTitle": "Senior Software Engineer",
+      "description": "Senior Software Engineer with 6+ years of experience in full-stack development",
+      "url": "https://your-domain.com/",
+      "image": "https://your-domain.com/images/profile.jpg",
+      "email": "longhv.dev@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ho Chi Minh City",
+        "addressCountry": "VN"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Confidential Company"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Thai Nguyen University"
+      },
+      "knowsAbout": [
+        "TypeScript",
+        "JavaScript",
+        "NestJS",
+        "React",
+        "MongoDB",
+        "PostgreSQL",
+        "Redis",
+        "Kafka",
+        "Docker",
+        "Microservices",
+        "Full-Stack Development"
+      ],
+      "sameAs": [
+        "https://linkedin.com/in/your-profile",
+        "https://github.com/your-username"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div class="cv-container">
       <!-- Header Controls -->
-      <header class="cv-header-controls">
+      <header class="cv-header-controls" role="banner">
         <div class="controls-wrapper">
           <div class="language-controls">
             <label for="language-select">Language:</label>
-            <select id="language-select" class="language-select">
+            <select id="language-select" class="language-select" aria-label="Select language">
               <option value="en">English</option>
             </select>
           </div>
           <div class="action-controls">
-            <button id="download-pdf-btn" class="btn btn-secondary">
+            <button id="download-pdf-btn" class="btn btn-secondary" aria-label="Download CV as PDF">
               Download PDF
             </button>
           </div>
@@ -34,9 +121,9 @@
       </header>
 
       <!-- CV Content -->
-      <main class="cv-content" id="cv-content">
+      <main class="cv-content" id="cv-content" role="main">
         <!-- CV will be rendered here -->
-        <div class="loading">Loading CV...</div>
+        <div class="loading" aria-live="polite">Loading CV...</div>
       </main>
     </div>
 
@@ -44,5 +131,14 @@
     <script src="scripts/text_processor.js"></script>
     <script src="scripts/cv_renderer.js"></script>
     <script src="scripts/main.js"></script>
+    
+    <!-- Analytics (if needed) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
+    <!-- <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script> -->
   </body>
 </html>
