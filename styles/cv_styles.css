@@ -94,6 +94,67 @@ h6 {
   background-color: #7f8c8d;
 }
 
+/* SEO Content Styles */
+.seo-content {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  margin-bottom: 2rem;
+}
+
+.seo-content h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.seo-content h2 {
+  color: #3498db;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.seo-content h3 {
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+}
+
+.seo-content p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  color: #555;
+}
+
+.seo-content ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.seo-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.seo-content strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.professional-summary,
+.key-expertise,
+.achievements {
+  margin-bottom: 2rem;
+}
+
 /* CV Content */
 .cv-content {
   padding: 2rem;
