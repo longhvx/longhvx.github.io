@@ -11,6 +11,15 @@ body {
   color: #333;
   background-color: #f5f5f5;
 }
+/* Disable default h tag text styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
 
 /* CV Container */
 .cv-container {
@@ -161,7 +170,6 @@ body {
 
 .subsection-title {
   font-size: 1.1rem;
-  font-weight: 600;
   color: #34495e;
   margin-bottom: 0.5rem;
   position: relative;
