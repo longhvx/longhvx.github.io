@@ -46,12 +46,6 @@
   ],
   "shortcuts": [
     {
-      "name": "Download PDF",
-      "short_name": "PDF",
-      "description": "Download CV as PDF",
-      "url": "/docs/CV_VuHoangLong_FullStack.pdf"
-    },
-    {
       "name": "Professional Summary",
       "short_name": "Summary",
       "description": "View professional summary",

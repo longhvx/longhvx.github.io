@@ -17,7 +17,7 @@
         {
           "type": "paragraph",
           "text": {
-            "en": "{{bold('Full-Stack Developer')}} (2019–present) specializing in {{bold('high-load microservices')}} and modern frontend development. Proven ability to {{bold('design scalable architectures, optimize performance, and deliver engaging UIs')}}. Passionate about {{bold('building systems that handle millions of users reliably')}}."
+            "en": "{{bold('Senior Software Engineer')}} specializing in {{bold('backend architecture')}}, {{bold('event-driven systems')}}, and {{bold('multi-tenant platform design')}}. Proven ability to {{bold('deliver reliable services, simplify complex integrations, and maintain high-quality codebases')}}. Focused on {{bold('building practical systems that scale with strong operational discipline')}}."
           }
         }
       ]
@@ -31,13 +31,13 @@
           "style": "bulleted",
           "items": [
             {
-              "en": "{{bold('Back-End Development')}}: {{bold('TypeScript/JavaScript')}}, {{bold('NestJS')}}, Express.js, HTTP API, WebSocket, SSE, {{bold('MongoDB')}}, {{bold('PostgreSQL')}}, MSSQL, {{bold('Redis')}}, {{bold('Kafka')}}, {{bold('RabbitMQ')}}, BullMQ."
+              "en": "{{bold('Back-End Development')}}: {{bold('TypeScript')}}, {{bold('NestJS')}}, {{bold('PostgreSQL')}}, {{bold('SQS')}}, {{bold('EventBridge')}}, {{bold('Lambda')}}, HTTP API, WebSocket, SSE."
             },
             {
               "en": "{{bold('Front-End Development')}}: {{bold('React')}}, react-native, {{bold('MobX')}}, {{bold('zustand')}}, Ant Design, MUI, TailwindCSS, HTTP API, WebSocket, SSE, react-router, react-query, react-hook-form, react-spring, usehooks."
             },
             {
-              "en": "{{bold('Others')}}: Cloudflare, {{bold('Git')}}, GitLab CI, {{bold('Docker')}}, {{bold('docker-compose')}}, Nginx, Linux."
+              "en": "{{bold('Others')}}: {{bold('Git')}}, GitLab CI, {{bold('Docker')}}, Cloudflare, Linux."
             }
           ]
         }
@@ -50,7 +50,96 @@
         {
           "type": "subsection",
           "title": {
-            "en": "{{bold('Software Engineer')}} @ Confidential Company (01/2019–05/2025)"
+            "en": "{{bold('Software Engineer')}} @ Cloud Kinetix (09/2025–current)"
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Key Technologies')}}: TypeScript, NestJS, PostgreSQL, SQS, EventBridge, Lambda."
+              }
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Clinical Patient Onboarding System')}}"
+              }
+            },
+            {
+              "type": "list",
+              "style": "bulleted",
+              "title": { "en": "{{bold('My Role')}}" },
+              "items": [
+                {
+                  "en": "Implemented an end-to-end patient onboarding process from external surveys into the internal system using an {{bold('event-driven architecture')}}."
+                },
+                {
+                  "en": "Built a proactive client and appointment syncing workflow to keep data aligned across systems."
+                },
+                {
+                  "en": "Applied an {{bold('AI-driven agile development process')}} with the {{bold('BMAD-method')}} framework to accelerate delivery while maintaining a high-quality codebase."
+                }
+              ]
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Multi-Tenancy Initiative')}}"
+              }
+            },
+            {
+              "type": "list",
+              "style": "bulleted",
+              "title": { "en": "{{bold('My Role')}}" },
+              "items": [
+                {
+                  "en": "Drove the initiative to officially support multi-tenancy for a legacy system."
+                },
+                {
+                  "en": "Migrated from application-level isolation to database-level isolation with {{bold('PostgreSQL RLS')}}, replacing multi-hop verification with {{bold('0-hop verification')}} without changing business code."
+                },
+                {
+                  "en": "Replaced the legacy unstandardized JWT self-issuance flow with a secure and simple tenant onboarding process using {{bold('AWS Cognito OAuth 2.0 IDP')}}."
+                },
+                {
+                  "en": "Implemented a low-overhead and reliable database-level audit trail based on {{bold('WAL')}}."
+                }
+              ]
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Platform Enablement')}}"
+              }
+            },
+            {
+              "type": "list",
+              "style": "bulleted",
+              "title": { "en": "{{bold('My Role')}}" },
+              "items": [
+                {
+                  "en": "Added the foundation for {{bold('feature flags')}} to support a {{bold('trunk-based development')}} model and enable a fast, non-blocking release process."
+                },
+                {
+                  "en": "Improved observability by standardizing logging to the {{bold('OTel')}} standard and enabling end-to-end traceability."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subsection",
+          "title": {
+            "en": "{{bold('Software Engineer')}} @ Confidential Company (01/2019–08/2025)"
           },
           "blocks": [
             {

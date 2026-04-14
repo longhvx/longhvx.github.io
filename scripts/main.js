@@ -12,7 +12,6 @@ class CVBuilder {
     // DOM elements
     this.cvContent = document.getElementById("cv-content");
     this.languageSelect = document.getElementById("language-select");
-    this.downloadPdfBtn = document.getElementById("download-pdf-btn");
 
     this.initialize();
   }
@@ -105,13 +104,6 @@ class CVBuilder {
       });
     }
 
-    // Download PDF button
-    if (this.downloadPdfBtn) {
-      this.downloadPdfBtn.addEventListener("click", () => {
-        this.downloadPDF();
-      });
-    }
-
     // Keyboard shortcuts
     document.addEventListener("keydown", (e) => {
       // Ctrl/Cmd + P for print (still works for browser print)
@@ -165,27 +157,6 @@ class CVBuilder {
     } catch (error) {
       console.error("Error rendering CV:", error);
       this.showError("Failed to render CV. Please check the data structure.");
-    }
-  }
-
-  /**
-   * Download CV as PDF
-   */
-  downloadPDF() {
-    try {
-      // Create a link element to download the PDF file
-      const link = document.createElement("a");
-      link.href = "docs/CV_VuHoangLong_FullStack.pdf";
-      link.download = "CV_VuHoangLong_FullStack.pdf";
-      link.target = "_blank";
-
-      // Append to body, click, and remove
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-      this.showError("Failed to download PDF. Please try printing instead.");
     }
   }
 
