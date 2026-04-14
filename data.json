@@ -56,13 +56,13 @@
             {
               "type": "paragraph",
               "text": {
-                "en": "{{bold('Key Technologies')}}: TypeScript, NestJS, PostgreSQL, SQS, EventBridge, Lambda."
+                "en": "{{bold('Project Objective')}}: A healthtech platform focused on improving the lives of individuals impacted by ASD/IDD and supporting the caregivers around them."
               }
             },
             {
               "type": "paragraph",
               "text": {
-                "en": "{{bold('Project Objective')}}: A healthtech platform focused on improving the lives of individuals impacted by ASD/IDD and supporting the caregivers around them."
+                "en": "{{bold('Key Technologies')}}: TypeScript, NestJS, PostgreSQL, SQS, EventBridge, Lambda."
               }
             },
             {
