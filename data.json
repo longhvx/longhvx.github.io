@@ -60,6 +60,12 @@
               }
             },
             {
+              "type": "paragraph",
+              "text": {
+                "en": "{{bold('Project Objective')}}: A healthtech platform focused on improving the lives of individuals impacted by ASD/IDD and supporting the caregivers around them."
+              }
+            },
+            {
               "type": "divider"
             },
             {
