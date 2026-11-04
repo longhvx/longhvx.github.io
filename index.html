@@ -65,8 +65,8 @@
     <meta property="linkedin:owner" content="your-linkedin-profile" />
 
     <!-- Additional SEO Meta Tags -->
-    <meta name="theme-color" content="#3498db" />
-    <meta name="msapplication-TileColor" content="#3498db" />
+    <meta name="theme-color" content="#1f2a37" />
+    <meta name="msapplication-TileColor" content="#1f2a37" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="VU HOANG LONG CV" />
@@ -145,116 +145,15 @@
     </script>
   </head>
   <body>
-    <div class="cv-container">
-      <!-- Header Controls -->
-      <header class="cv-header-controls" role="banner">
-        <div class="controls-wrapper">
-          <div class="language-controls">
-            <label for="language-select">Language:</label>
-            <select
-              id="language-select"
-              class="language-select"
-              aria-label="Select language"
-            >
-              <option value="en">English</option>
-            </select>
-          </div>
-          <div class="action-controls">
-          </div>
-        </div>
-      </header>
-
-      <!-- CV Content -->
-      <main class="cv-content" id="cv-content" role="main">
-        <!-- SEO Content Section -->
-        <section class="seo-content" aria-label="Professional Information">
-          <h1>VU HOANG LONG - Senior Software Engineer</h1>
-          <h2>Full-Stack Developer & Microservices Expert</h2>
-
-          <div class="professional-summary">
-            <h3>Professional Summary</h3>
-            <p>
-              Senior Software Engineer with 6+ years of experience specializing
-              in high-load microservices and modern frontend development. Proven
-              ability to design scalable architectures, optimize performance,
-              and deliver engaging user interfaces. Passionate about building
-              systems that handle millions of users reliably.
-            </p>
-          </div>
-
-          <div class="key-expertise">
-            <h3>Key Expertise</h3>
-            <ul>
-              <li>
-                <strong>Back-End Development:</strong> TypeScript/JavaScript,
-                NestJS, Express.js, MongoDB, PostgreSQL, Redis, Kafka, RabbitMQ
-              </li>
-              <li>
-                <strong>Front-End Development:</strong> React, React Native,
-                MobX, Zustand, Ant Design, MUI, TailwindCSS
-              </li>
-              <li>
-                <strong>DevOps & Tools:</strong> Docker, Git, GitLab CI, Nginx,
-                Linux, Cloudflare
-              </li>
-            </ul>
-          </div>
-
-          <div class="achievements">
-            <h3>Key Achievements</h3>
-            <ul>
-              <li>
-                Successfully built and operated a scalable online gaming
-                platform with 80,000 active users
-              </li>
-              <li>
-                Achieved 95% of requests responding under 200ms through
-                performance optimizations
-              </li>
-              <li>
-                Handled peak concurrent users of 1,500 with 6,000 requests per
-                second
-              </li>
-              <li>
-                Implemented real-time features using WebSocket and Server-Sent
-                Events
-              </li>
-            </ul>
-          </div>
-
-          <div class="contact-info">
-            <h3>Contact Information</h3>
-            <p>
-              <strong>Email:</strong>
-              <a href="mailto:longhv.dev@gmail.com">longhv.dev@gmail.com</a>
-            </p>
-            <p><strong>Location:</strong> Ho Chi Minh City, Vietnam</p>
-            <p>
-              <strong>LinkedIn:</strong>
-              <a
-                href="https://linkedin.com/in/longhv-dev"
-                target="_blank"
-                rel="noopener"
-                >linkedin.com/in/longhv-dev</a
-              >
-            </p>
-            <p>
-              <strong>GitHub:</strong>
-              <a
-                href="https://github.com/longhvx"
-                target="_blank"
-                rel="noopener"
-                >github.com/longhvx</a
-              >
-            </p>
-          </div>
-        </section>
-
-        <!-- CV will be rendered here -->
-        <div class="loading" aria-live="polite">Loading CV...</div>
+    <div class="page">
+      <main class="cv" id="cv-content" role="main">
+        <p class="loading" aria-live="polite">Loading CV…</p>
       </main>
     </div>
-
+    <a class="pdf-button" id="pdf-button" href="cv.pdf" download="CV_VuHoangLong.pdf" aria-label="Download CV as PDF">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Download PDF</span>
+    </a>
     <!-- Scripts -->
     <script src="scripts/text_processor.js"></script>
     <script src="scripts/cv_renderer.js"></script>

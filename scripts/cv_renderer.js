@@ -188,43 +188,43 @@ class CVRenderer {
    * @returns {HTMLElement} - Rendered contact element
    */
   renderContact(contact) {
-    const contactDiv = document.createElement("div");
-    contactDiv.className = "cv-contact";
+    const list = document.createElement("ul");
+    list.className = "cv-contact";
 
-    const contactItems = [];
+    const get = (key) =>
+      contact[key]
+        ? TextProcessor.getLocalizedText(contact[key], this.currentLanguage)
+        : "";
 
-    if (contact.email) {
-      const email = TextProcessor.getLocalizedText(
-        contact.email,
-        this.currentLanguage
-      );
-      if (email) {
-        contactItems.push(`Email: ${email}`);
+    const items = [
+      { key: "email", href: (v) => `mailto:${v}` },
+      { key: "phone", href: (v) => `tel:${v.replace(/\s+/g, "")}` },
+      { key: "location", href: null },
+      { key: "linkedin", href: (v) => `https://${v.replace(/^https?:\/\//, "")}` },
+      { key: "github", href: (v) => `https://${v.replace(/^https?:\/\//, "")}` },
+    ];
+
+    items.forEach(({ key, href }) => {
+      const value = get(key);
+      if (!value) return;
+      const li = document.createElement("li");
+      li.className = `contact-${key}`;
+      if (href) {
+        const a = document.createElement("a");
+        a.href = href(value);
+        a.textContent = value;
+        if (key === "linkedin" || key === "github") {
+          a.target = "_blank";
+          a.rel = "noopener";
+        }
+        li.appendChild(a);
+      } else {
+        li.textContent = value;
       }
-    }
+      list.appendChild(li);
+    });
 
-    if (contact.phone) {
-      const phone = TextProcessor.getLocalizedText(
-        contact.phone,
-        this.currentLanguage
-      );
-      if (phone) {
-        contactItems.push(`Phone: ${phone}`);
-      }
-    }
-
-    if (contact.location) {
-      const location = TextProcessor.getLocalizedText(
-        contact.location,
-        this.currentLanguage
-      );
-      if (location) {
-        contactItems.push(`Location: ${location}`);
-      }
-    }
-
-    contactDiv.textContent = contactItems.join(" | ");
-    return contactDiv;
+    return list;
   }
 
   /**
@@ -272,7 +272,7 @@ class CVRenderer {
    * @returns {HTMLElement} - Rendered section
    */
   renderSection(block) {
-    const section = document.createElement("div");
+    const section = document.createElement("section");
     section.className = "cv-section";
 
     // Render section title
@@ -314,6 +314,17 @@ class CVRenderer {
       });
     }
 
+    // Skills: the label is shown as its own line, so drop the ": " after it.
+    if (section.id === "skills") {
+      section.querySelectorAll("li").forEach((li) => {
+        const label = li.firstElementChild;
+        const next = label && label.nextSibling;
+        if (label && label.tagName === "STRONG" && next && next.nodeType === 3) {
+          next.textContent = next.textContent.replace(/^\s*:\s*/, "");
+        }
+      });
+    }
+
     return section;
   }
 
@@ -326,15 +337,42 @@ class CVRenderer {
     const subsection = document.createElement("div");
     subsection.className = "cv-subsection";
 
-    // Render subsection title
+    // Render subsection title, split into role / company / dates when the
+    // title follows the "Role @ Company (dates)" convention.
     if (block.title) {
-      const titleElement = TextProcessor.createElement(
-        "h3",
+      const raw = TextProcessor.getLocalizedText(
         block.title,
-        this.currentLanguage,
-        { class: "subsection-title" }
+        this.currentLanguage
       );
-      subsection.appendChild(titleElement);
+      const match = raw.match(/^(.*?)\s*@\s*(.*?)\s*\(([^()]*)\)\s*$/);
+
+      if (match) {
+        const head = document.createElement("div");
+        head.className = "subsection-head";
+
+        const title = document.createElement("h3");
+        title.className = "subsection-title";
+        const role = document.createElement("span");
+        role.className = "subsection-role";
+        role.innerHTML = TextProcessor.processText(match[1]);
+        const company = document.createElement("span");
+        company.className = "subsection-company";
+        company.innerHTML = TextProcessor.processText(match[2]);
+        title.append(role, company);
+
+        const dates = document.createElement("span");
+        dates.className = "subsection-dates";
+        dates.textContent = match[3].replace(/\s*[–-]\s*/, " – ");
+
+        head.append(title, dates);
+        subsection.appendChild(head);
+      } else {
+        subsection.appendChild(
+          TextProcessor.createElement("h3", block.title, this.currentLanguage, {
+            class: "subsection-title",
+          })
+        );
+      }
     }
 
     // Render subsection blocks
