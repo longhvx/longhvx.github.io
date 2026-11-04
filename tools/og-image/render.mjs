@@ -22,7 +22,6 @@ const ROOT = resolve(HERE, "../..");
 const WIDTH = 1200;
 const HEIGHT = 630;
 const SITE = "longhvx.github.io";
-const MAX_SKILLS = 9;
 
 const COLORS = {
   bg: "#f4f5f7",
@@ -31,8 +30,6 @@ const COLORS = {
   muted: "#6b7280",
   rule: "#e5e7eb",
   accent: "#0f766e",
-  accentSoft: "#eef6f5",
-  accentBorder: "#cfe5e2",
 };
 
 const fontFile = (weight) =>
@@ -65,22 +62,27 @@ const plain = (v) => text(v).replace(MARKUP, "$1");
 
 export function cardContent(data) {
   const header = data.blocks.find((b) => b.type === "header") ?? {};
-  const skillsSection = data.blocks.find(
-    (b) => b.type === "section" && plain(b.title).toLowerCase() === "skills"
+  const summarySection = data.blocks.find(
+    (b) => b.type === "section" && plain(b.title).toLowerCase() === "professional summary"
+  );
+  const summaryText = text(
+    summarySection?.blocks?.find((b) => b.type === "paragraph")?.text
   );
 
-  // Highlighted (bold) entries of each skills group, excluding the group label.
-  const skills = [];
-  for (const list of skillsSection?.blocks ?? []) {
-    for (const item of list.items ?? []) {
-      skills.push(...[...text(item).matchAll(MARKUP)].map((m) => m[1]).slice(1));
-    }
+  // Split the summary into runs so bold phrases from data.json stay bold.
+  const summary = [];
+  let last = 0;
+  for (const m of summaryText.matchAll(MARKUP)) {
+    if (m.index > last) summary.push({ text: summaryText.slice(last, m.index), bold: false });
+    summary.push({ text: m[1], bold: true });
+    last = m.index + m[0].length;
   }
+  if (last < summaryText.length) summary.push({ text: summaryText.slice(last), bold: false });
 
   return {
     name: plain(header.name),
     title: plain(header.title),
-    skills: [...new Set(skills)].slice(0, MAX_SKILLS),
+    summary,
     contact: ["email", "location"]
       .map((key) => ({ key, value: plain(header.contact?.[key]) }))
       .filter((c) => c.value),
@@ -95,7 +97,7 @@ const h = (type, style, ...children) => ({
   props: { style, children: children.length === 1 ? children[0] : children },
 });
 
-function card({ name, title, skills, contact }) {
+function card({ name, title, summary, contact }) {
   return h(
     "div",
     {
@@ -126,12 +128,12 @@ function card({ name, title, skills, contact }) {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          padding: "64px 72px 52px 62px",
+          padding: "56px 72px 48px 62px",
         },
         h(
           "div",
           {
-            fontSize: 76,
+            fontSize: 68,
             fontWeight: 800,
             letterSpacing: "-0.03em",
             lineHeight: 1,
@@ -141,25 +143,23 @@ function card({ name, title, skills, contact }) {
         ),
         h(
           "div",
-          { marginTop: 18, fontSize: 34, fontWeight: 500, color: COLORS.accent },
+          { marginTop: 14, fontSize: 30, fontWeight: 500, color: COLORS.accent },
           title
         ),
         h(
           "div",
-          { display: "flex", flexWrap: "wrap", gap: 12, marginTop: 44 },
-          ...skills.map((s) =>
+          {
+            display: "block",
+            marginTop: 28,
+            fontSize: 24,
+            lineHeight: 1.5,
+            color: COLORS.muted,
+          },
+          ...summary.map((run) =>
             h(
-              "div",
-              {
-                padding: "10px 20px",
-                fontSize: 22,
-                fontWeight: 600,
-                color: COLORS.ink,
-                background: COLORS.accentSoft,
-                border: `1px solid ${COLORS.accentBorder}`,
-                borderRadius: 999,
-              },
-              s
+              "span",
+              run.bold ? { fontWeight: 600, color: COLORS.ink } : {},
+              run.text
             )
           )
         ),
