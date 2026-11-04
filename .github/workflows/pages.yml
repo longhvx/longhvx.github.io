@@ -1,4 +1,4 @@
-name: Build site (deploys on main)
+name: Build site
 
 on:
   push:
@@ -66,7 +66,7 @@ jobs:
           path: _site
 
   deploy:
-    name: Deploy to GitHub Pages (main only)
+    name: Deploy to GitHub Pages
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
