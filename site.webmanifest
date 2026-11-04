@@ -67,7 +67,7 @@
   "screenshots": [
     {
       "src": "/images/preview.png",
-      "sizes": "1420x694",
+      "sizes": "1200x630",
       "type": "image/png",
       "form_factor": "wide",
       "label": "CV Preview"

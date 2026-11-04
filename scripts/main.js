@@ -252,6 +252,11 @@ class CVBuilder {
   }
 }
 
+// "?capture" renders the page for the generated social preview image.
+if (new URLSearchParams(location.search).has("capture")) {
+  document.documentElement.classList.add("capture");
+}
+
 // Initialize application when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   new CVBuilder();

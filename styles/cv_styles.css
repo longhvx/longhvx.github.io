@@ -362,6 +362,11 @@ strong {
 }
 
 
+/* Social preview capture (see scripts/capture_preview.sh) */
+.capture .pdf-button {
+  display: none;
+}
+
 /* ==========================================================================
    Responsive
    ========================================================================== */

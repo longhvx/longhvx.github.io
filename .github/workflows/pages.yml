@@ -50,8 +50,11 @@ jobs:
         run: |
           mkdir _site
           cp -r index.html data.json site.webmanifest favicon.ico favicon-*.png apple-touch-icon.png images scripts styles _site/
-          rm _site/scripts/build_cv_tex.mjs
+          rm _site/scripts/build_cv_tex.mjs _site/scripts/capture_preview.sh
           cp build/cv.pdf _site/cv.pdf
+
+      - name: Generate social preview image
+        run: scripts/capture_preview.sh _site _site/images/preview.png
 
       - uses: actions/upload-pages-artifact@v5
         with:
