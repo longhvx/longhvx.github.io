@@ -25,6 +25,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: tools/og-image/package-lock.json
 
       - name: Install tectonic
         run: |
@@ -50,11 +52,13 @@ jobs:
         run: |
           mkdir _site
           cp -r index.html data.json site.webmanifest favicon.ico favicon-*.png apple-touch-icon.png images scripts styles _site/
-          rm _site/scripts/build_cv_tex.mjs _site/scripts/capture_preview.sh
+          rm _site/scripts/build_cv_tex.mjs
           cp build/cv.pdf _site/cv.pdf
 
       - name: Generate social preview image
-        run: scripts/capture_preview.sh _site _site/images/preview.png
+        run: |
+          npm ci --prefix tools/og-image --no-audit --no-fund
+          node tools/og-image/render.mjs render data.json _site/images/preview.png
 
       - uses: actions/upload-pages-artifact@v5
         with:

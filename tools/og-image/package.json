@@ -1,0 +1,15 @@
+{
+  "name": "og-image",
+  "private": true,
+  "description": "Generates the social preview image (images/preview.png) from data.json",
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs render",
+    "serve": "node render.mjs serve"
+  },
+  "dependencies": {
+    "@fontsource/inter": "5.3.0",
+    "@resvg/resvg-js": "2.6.2",
+    "satori": "0.63.2"
+  }
+}

@@ -2,3 +2,4 @@ build/
 cv.pdf
 _site/
 images/preview.png
+node_modules/
