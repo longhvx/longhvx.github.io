@@ -8,6 +8,10 @@
 #   pr-preview.sh publish          <N> <sha> <site-dir>  -> outputs: changed, expires
 #   pr-preview.sh remove           <N> <reason>          -> outputs: changed, removed
 #   pr-preview.sh expire                                 -> outputs: changed, removed
+#   pr-preview.sh url              <N>       -> prints the preview URL
+#   pr-preview.sh status           <sha> <state> <description> [target-url]
+#   pr-preview.sh comment-deploying <N> <sha> <run-url>
+#   pr-preview.sh comment-failed    <N> <sha> <run-url>
 #   pr-preview.sh comment-published <N> <sha> <expires>
 #   pr-preview.sh comment-removed   "<N:reason> [N:reason ...]"
 #   pr-preview.sh comment-skipped   <N> <reason>
@@ -19,6 +23,8 @@ REPO=${GITHUB_REPOSITORY:?}
 BRANCH="pr-previews"
 TTL_DAYS=7
 MARKER="<!-- pr-preview-bot -->"
+STATUS_CONTEXT="PR preview"
+SPINNER_URL="https://raw.githubusercontent.com/${REPO}/${DEFAULT_BRANCH:-main}/.github/assets/deploying.gif"
 AUTH_URL="https://x-access-token:${GH_TOKEN:?}@github.com/${REPO}.git"
 
 owner=${REPO%%/*}
@@ -157,6 +163,36 @@ case "$cmd" in
       out changed false
     fi
     out removed "${removed# }"
+    ;;
+
+  url)
+    preview_url "$1"
+    ;;
+
+  status)
+    sha=$1 state=$2 description=$3 target=${4:-}
+    args=(-f state="$state" -f context="$STATUS_CONTEXT" -f description="$description")
+    [ -n "$target" ] && args+=(-f target_url="$target")
+    gh api -X POST "repos/$REPO/statuses/$sha" "${args[@]}" >/dev/null
+    echo "status $state on ${sha:0:7}: $description"
+    ;;
+
+  comment-deploying)
+    number=$1 sha=$2 run_url=$3
+    upsert_comment "$number" "$MARKER
+### <img src=\"$SPINNER_URL\" width=\"20\" height=\"20\" alt=\"\"> Preview is deploying…
+
+Building and publishing the preview of ${sha:0:7}. This comment will update with the links when it's ready (usually 2–3 minutes).
+
+[Follow the run]($run_url)"
+    ;;
+
+  comment-failed)
+    number=$1 sha=$2 run_url=$3
+    upsert_comment "$number" "$MARKER
+### Preview failed
+
+Publishing the preview of ${sha:0:7} failed. [See the run]($run_url) for details; pushing a new commit retries."
     ;;
 
   comment-published)
