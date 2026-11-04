@@ -148,9 +148,7 @@ class CVBuilder {
       const renderedCV = this.renderer.renderCV(this.cvData);
 
       // Add table of contents if available
-      if (renderedCV.toc) {
-        this.cvContent.appendChild(renderedCV.toc);
-      }
+      // (Table of contents intentionally not shown in the redesign.)
 
       // Add main content
       this.cvContent.appendChild(renderedCV.content);
@@ -248,14 +246,7 @@ class CVBuilder {
   showLoading() {
     if (this.cvContent) {
       this.cvContent.innerHTML = `
-                <div class="loading" style="
-                    text-align: center;
-                    padding: 2rem;
-                    color: #7f8c8d;
-                    font-style: italic;
-                ">
-                    Loading CV...
-                </div>
+                <p class="loading">Loading CV…</p>
             `;
     }
   }

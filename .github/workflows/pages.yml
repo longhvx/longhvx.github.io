@@ -1,0 +1,72 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TECTONIC_VERSION: 0.17.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install tectonic
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+            | tar -xz -C "$HOME/.local/bin" tectonic
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Cache LaTeX packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/Tectonic
+          key: tectonic-${{ env.TECTONIC_VERSION }}-${{ hashFiles('scripts/build_cv_tex.mjs') }}
+          restore-keys: tectonic-${{ env.TECTONIC_VERSION }}-
+
+      - name: Generate LaTeX from data.json
+        run: node scripts/build_cv_tex.mjs data.json build/cv.tex
+
+      - name: Compile PDF
+        run: tectonic -X compile build/cv.tex --outdir build
+
+      - name: Assemble site
+        run: |
+          mkdir _site
+          cp -r index.html data.json site.webmanifest favicon.ico favicon-*.png apple-touch-icon.png images scripts styles _site/
+          rm _site/scripts/build_cv_tex.mjs
+          cp build/cv.pdf _site/cv.pdf
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
