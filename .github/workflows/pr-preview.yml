@@ -1,0 +1,155 @@
+# Publishes each PR's built site to <pages-url>/pr-preview/pr-<N>/ and comments
+# the page, PDF and social preview image on the PR. A preview is removed 7 days
+# after its last build, or when the PR is merged or closed.
+#
+# Runs from the default branch only (workflow_run / pull_request_target), so the
+# PR's own code is never executed here; the PR build's output is treated as data.
+name: PR preview
+
+on:
+  workflow_run:
+    workflows: [Build site]
+    types: [completed]
+  pull_request_target:
+    types: [closed]
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-preview
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish preview
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    outputs:
+      number: ${{ steps.check.outputs.number }}
+      changed: ${{ steps.publish.outputs.changed }}
+      expires: ${{ steps.publish.outputs.expires }}
+      sha: ${{ github.event.workflow_run.head_sha }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: pr-meta
+          path: pr-meta
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - id: check
+        env:
+          RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: .github/scripts/pr-preview.sh check pr-meta/pr.json
+
+      - if: steps.check.outputs.publish == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: pr-site
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - id: publish
+        if: steps.check.outputs.publish == 'true'
+        env:
+          NUMBER: ${{ steps.check.outputs.number }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: .github/scripts/pr-preview.sh publish "$NUMBER" "$SHA" pr-site
+
+      - if: steps.check.outputs.publish != 'true'
+        env:
+          NUMBER: ${{ steps.check.outputs.number }}
+          REASON: ${{ steps.check.outputs.reason }}
+        run: .github/scripts/pr-preview.sh comment-skipped "$NUMBER" "$REASON"
+
+  cleanup:
+    name: Remove previews
+    if: github.event_name != 'workflow_run'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.remove.outputs.changed }}
+      removed: ${{ steps.remove.outputs.removed }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # pull_request_target checks out the base branch; never the PR's code.
+          ref: ${{ github.event.repository.default_branch }}
+
+      - id: remove
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          MERGED: ${{ github.event.pull_request.merged }}
+        run: |
+          if [ "$EVENT" = "pull_request_target" ]; then
+            .github/scripts/pr-preview.sh remove "$PR_NUMBER" "$([ "$MERGED" = true ] && echo merged || echo closed)"
+          else
+            .github/scripts/pr-preview.sh expire
+          fi
+
+  build-main:
+    name: Build main
+    needs: [publish, cleanup]
+    if: >-
+      always() &&
+      (needs.publish.outputs.changed == 'true' || needs.cleanup.outputs.changed == 'true')
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ github.event.repository.default_branch }}
+
+  deploy:
+    name: Deploy
+    needs: build-main
+    if: always() && needs.build-main.result == 'success'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
+
+  comment:
+    name: Comment on PR
+    needs: [publish, cleanup, deploy]
+    if: always() && needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - if: needs.publish.outputs.changed == 'true'
+        env:
+          NUMBER: ${{ needs.publish.outputs.number }}
+          SHA: ${{ needs.publish.outputs.sha }}
+          EXPIRES: ${{ needs.publish.outputs.expires }}
+        run: .github/scripts/pr-preview.sh comment-published "$NUMBER" "$SHA" "$EXPIRES"
+
+      - if: needs.cleanup.outputs.removed != ''
+        env:
+          REMOVED: ${{ needs.cleanup.outputs.removed }}
+        run: .github/scripts/pr-preview.sh comment-removed "$REMOVED"

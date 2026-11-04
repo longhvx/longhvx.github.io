@@ -1,0 +1,117 @@
+# Reusable: builds the site (PDF + social preview image in parallel) and
+# uploads it as the "site" artifact of the calling run.
+name: Build (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build (empty = the ref of the triggering event)
+        type: string
+        default: ""
+      retention-days:
+        type: number
+        default: 1
+
+env:
+  TECTONIC_VERSION: 0.17.0
+
+jobs:
+  pdf:
+    name: Build PDF
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install tectonic
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+            | tar -xz -C "$HOME/.local/bin" tectonic
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Cache LaTeX packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/Tectonic
+          key: tectonic-${{ env.TECTONIC_VERSION }}-${{ hashFiles('scripts/build_cv_tex.mjs') }}
+          restore-keys: tectonic-${{ env.TECTONIC_VERSION }}-
+
+      - name: Generate LaTeX from data.json
+        run: node scripts/build_cv_tex.mjs data.json build/cv.tex
+
+      - name: Compile PDF
+        run: tectonic -X compile build/cv.tex --outdir build
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: cv-pdf
+          path: build/cv.pdf
+          if-no-files-found: error
+          retention-days: 1
+
+  preview:
+    name: Build preview image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/og-image/package-lock.json
+
+      - name: Generate social preview image
+        run: |
+          npm ci --prefix tools/og-image --no-audit --no-fund
+          node tools/og-image/render.mjs render data.json build/preview.png
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: preview-png
+          path: build/preview.png
+          if-no-files-found: error
+          retention-days: 1
+
+  site:
+    name: Build site
+    needs: [pdf, preview]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: cv-pdf
+          path: build
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: preview-png
+          path: build
+
+      - name: Assemble site
+        run: |
+          mkdir _site
+          cp -r index.html data.json site.webmanifest favicon.ico favicon-*.png apple-touch-icon.png images scripts styles _site/
+          rm _site/scripts/build_cv_tex.mjs
+          cp build/cv.pdf _site/cv.pdf
+          cp build/preview.png _site/images/preview.png
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: _site
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention-days }}

@@ -13,111 +13,40 @@ concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  TECTONIC_VERSION: 0.17.0
-
 jobs:
-  pdf:
-    name: Build PDF
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+    with:
+      retention-days: 3
+
+  # Read by the "PR preview" workflow, which publishes the preview and comments.
+  pr-meta:
+    name: Record PR details
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-
-      - name: Install tectonic
+      - name: Write PR details
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          mkdir -p "$HOME/.local/bin"
-          curl -fsSL "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-            | tar -xz -C "$HOME/.local/bin" tectonic
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Cache LaTeX packages
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/Tectonic
-          key: tectonic-${{ env.TECTONIC_VERSION }}-${{ hashFiles('scripts/build_cv_tex.mjs') }}
-          restore-keys: tectonic-${{ env.TECTONIC_VERSION }}-
-
-      - name: Generate LaTeX from data.json
-        run: node scripts/build_cv_tex.mjs data.json build/cv.tex
-
-      - name: Compile PDF
-        run: tectonic -X compile build/cv.tex --outdir build
+          mkdir pr-meta
+          printf '{"number": %s, "head_sha": "%s"}\n' "$PR_NUMBER" "$HEAD_SHA" > pr-meta/pr.json
+          cat pr-meta/pr.json
 
       - uses: actions/upload-artifact@v7
         with:
-          name: cv-pdf
-          path: build/cv.pdf
-          if-no-files-found: error
-          retention-days: 1
-
-  preview:
-    name: Build preview image
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: tools/og-image/package-lock.json
-
-      - name: Generate social preview image
-        run: |
-          npm ci --prefix tools/og-image --no-audit --no-fund
-          node tools/og-image/render.mjs render data.json build/preview.png
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: preview-png
-          path: build/preview.png
-          if-no-files-found: error
-          retention-days: 1
-
-  site:
-    name: Build site
-    needs: [pdf, preview]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/download-artifact@v8
-        with:
-          name: cv-pdf
-          path: build
-
-      - uses: actions/download-artifact@v8
-        with:
-          name: preview-png
-          path: build
-
-      - name: Assemble site
-        run: |
-          mkdir _site
-          cp -r index.html data.json site.webmanifest favicon.ico favicon-*.png apple-touch-icon.png images scripts styles _site/
-          rm _site/scripts/build_cv_tex.mjs
-          cp build/cv.pdf _site/cv.pdf
-          cp build/preview.png _site/images/preview.png
-
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: _site
+          name: pr-meta
+          path: pr-meta/pr.json
+          retention-days: 3
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy
     if: github.event_name != 'pull_request'
-    needs: site
-    runs-on: ubuntu-latest
+    needs: build
     permissions:
+      contents: read
       pages: write
       id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
+    uses: ./.github/workflows/deploy.yml
