@@ -9,6 +9,7 @@
 #   pr-preview.sh remove           <N> <reason>          -> outputs: changed, removed
 #   pr-preview.sh expire                                 -> outputs: changed, removed
 #   pr-preview.sh url              <N>       -> prints the preview URL
+#   pr-preview.sh wait-live        <N> <sha> -> outputs: live (true once the deployed preview is <sha>)
 #   pr-preview.sh status           <sha> <state> <description> [target-url]
 #   pr-preview.sh comment-deploying <N> <sha> <run-url>
 #   pr-preview.sh comment-failed    <N> <sha> <run-url>
@@ -58,6 +59,18 @@ push_previews() {
     return 1
   fi
   git -C previews commit --quiet -m "$1"
+  # Several runs may push at once; each touches only its own pr-<N>/ folder,
+  # so rebasing onto the latest branch and retrying never conflicts.
+  local attempt
+  for attempt in 1 2 3 4 5; do
+    if git -C previews push --quiet origin "HEAD:$BRANCH" 2>/dev/null; then
+      return 0
+    fi
+    echo "push rejected (attempt $attempt); rebasing onto latest $BRANCH"
+    git -C previews fetch --quiet origin "$BRANCH"
+    git -C previews rebase --quiet "origin/$BRANCH"
+    sleep "$attempt"
+  done
   git -C previews push --quiet origin "HEAD:$BRANCH"
 }
 
@@ -167,6 +180,22 @@ case "$cmd" in
 
   url)
     preview_url "$1"
+    ;;
+
+  wait-live)
+    # A deploy can be superseded by a newer one that also contains this
+    # preview, so check what is actually live rather than the job result.
+    number=$1 sha=$2
+    meta="$(preview_url "$number")preview.json"
+    for _ in $(seq 1 60); do
+      live=$(curl -fsS "$meta?t=$(date +%s%N)" 2>/dev/null | jq -r '.sha // empty' || true)
+      if [ "$live" = "$sha" ]; then
+        out live true; exit 0
+      fi
+      sleep 5
+    done
+    echo "preview for #$number is not live at ${sha:0:7} after 5 minutes (live: ${live:-none})"
+    out live false
     ;;
 
   status)
