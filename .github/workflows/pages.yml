@@ -1,4 +1,4 @@
-name: Build and deploy
+name: Build site
 
 on:
   push:
@@ -18,6 +18,7 @@ env:
 
 jobs:
   build:
+    name: Build site
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -25,6 +26,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: tools/og-image/package-lock.json
 
       - name: Install tectonic
         run: |
@@ -53,11 +56,17 @@ jobs:
           rm _site/scripts/build_cv_tex.mjs
           cp build/cv.pdf _site/cv.pdf
 
+      - name: Generate social preview image
+        run: |
+          npm ci --prefix tools/og-image --no-audit --no-fund
+          node tools/og-image/render.mjs render data.json _site/images/preview.png
+
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
   deploy:
+    name: Deploy to GitHub Pages
     if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
