@@ -19,9 +19,9 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: pr-preview
-  cancel-in-progress: false
+# No workflow-level concurrency: GitHub keeps only one pending run per group and
+# cancels the rest, which would drop previews. Pushes to pr-previews retry, and
+# deploys are serialised in deploy.yml.
 
 jobs:
   publish:
@@ -158,8 +158,16 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
 
+      - name: Wait for the preview to be live
+        id: live
+        if: needs.publish.outputs.changed == 'true' && contains(fromJSON('["success","cancelled"]'), needs.deploy.result)
+        env:
+          NUMBER: ${{ needs.publish.outputs.number }}
+          SHA: ${{ needs.publish.outputs.sha }}
+        run: .github/scripts/pr-preview.sh wait-live "$NUMBER" "$SHA"
+
       - name: Preview ready
-        if: needs.publish.outputs.changed == 'true' && needs.deploy.result == 'success'
+        if: steps.live.outputs.live == 'true'
         env:
           NUMBER: ${{ needs.publish.outputs.number }}
           SHA: ${{ needs.publish.outputs.sha }}
@@ -169,7 +177,7 @@ jobs:
           .github/scripts/pr-preview.sh status "$SHA" success "Preview ready" "$(.github/scripts/pr-preview.sh url "$NUMBER")"
 
       - name: Preview failed
-        if: needs.publish.outputs.started == 'true' && (needs.publish.outputs.changed != 'true' || needs.deploy.result != 'success')
+        if: needs.publish.outputs.started == 'true' && steps.live.outputs.live != 'true'
         env:
           NUMBER: ${{ needs.publish.outputs.number }}
           SHA: ${{ needs.publish.outputs.sha }}
@@ -177,7 +185,7 @@ jobs:
           .github/scripts/pr-preview.sh comment-failed "$NUMBER" "$SHA" "$RUN_URL"
           .github/scripts/pr-preview.sh status "$SHA" failure "Preview failed" "$RUN_URL"
 
-      - if: needs.cleanup.outputs.removed != '' && needs.deploy.result == 'success'
+      - if: needs.cleanup.outputs.removed != '' && contains(fromJSON('["success","cancelled"]'), needs.deploy.result)
         env:
           REMOVED: ${{ needs.cleanup.outputs.removed }}
         run: .github/scripts/pr-preview.sh comment-removed "$REMOVED"
