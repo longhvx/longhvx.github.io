@@ -1,0 +1,48 @@
+# Reusable: deploys the "site" artifact of the calling run to GitHub Pages,
+# with the active PR previews (branch pr-previews) mounted at /pr-preview/.
+name: Deploy (reusable)
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: _site
+
+      - name: Mount PR previews
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          if git ls-remote --exit-code --heads "https://github.com/$REPO.git" pr-previews >/dev/null; then
+            git clone --quiet --depth 1 --branch pr-previews "https://x-access-token:${GH_TOKEN}@github.com/$REPO.git" previews
+            rm -rf previews/.git
+            mkdir -p _site/pr-preview
+            cp -r previews/. _site/pr-preview/
+            echo "Mounted previews: $(find previews -mindepth 1 -maxdepth 1 -name 'pr-*' -printf '%f ')"
+          else
+            echo "No pr-previews branch yet; deploying the site only."
+          fi
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v5
