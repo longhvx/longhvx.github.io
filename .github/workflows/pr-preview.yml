@@ -35,8 +35,10 @@ jobs:
       actions: read
       contents: write
       pull-requests: write
+      statuses: write
     outputs:
       number: ${{ steps.check.outputs.number }}
+      started: ${{ steps.check.outputs.publish }}
       changed: ${{ steps.publish.outputs.changed }}
       expires: ${{ steps.publish.outputs.expires }}
       sha: ${{ github.event.workflow_run.head_sha }}
@@ -56,6 +58,16 @@ jobs:
         env:
           RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: .github/scripts/pr-preview.sh check pr-meta/pr.json
+
+      - name: Mark preview as deploying
+        if: steps.check.outputs.publish == 'true'
+        env:
+          NUMBER: ${{ steps.check.outputs.number }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          .github/scripts/pr-preview.sh status "$SHA" pending "Deploying preview…" "$RUN_URL"
+          .github/scripts/pr-preview.sh comment-deploying "$NUMBER" "$SHA" "$RUN_URL"
 
       - if: steps.check.outputs.publish == 'true'
         uses: actions/download-artifact@v8
@@ -130,26 +142,42 @@ jobs:
   comment:
     name: Comment on PR
     needs: [publish, cleanup, deploy]
-    if: always() && needs.deploy.result == 'success'
+    if: >-
+      always() &&
+      (needs.publish.outputs.started == 'true' || needs.cleanup.outputs.removed != '')
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
+      statuses: write
     env:
       GH_TOKEN: ${{ github.token }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.repository.default_branch }}
 
-      - if: needs.publish.outputs.changed == 'true'
+      - name: Preview ready
+        if: needs.publish.outputs.changed == 'true' && needs.deploy.result == 'success'
         env:
           NUMBER: ${{ needs.publish.outputs.number }}
           SHA: ${{ needs.publish.outputs.sha }}
           EXPIRES: ${{ needs.publish.outputs.expires }}
-        run: .github/scripts/pr-preview.sh comment-published "$NUMBER" "$SHA" "$EXPIRES"
+        run: |
+          .github/scripts/pr-preview.sh comment-published "$NUMBER" "$SHA" "$EXPIRES"
+          .github/scripts/pr-preview.sh status "$SHA" success "Preview ready" "$(.github/scripts/pr-preview.sh url "$NUMBER")"
 
-      - if: needs.cleanup.outputs.removed != ''
+      - name: Preview failed
+        if: needs.publish.outputs.started == 'true' && (needs.publish.outputs.changed != 'true' || needs.deploy.result != 'success')
+        env:
+          NUMBER: ${{ needs.publish.outputs.number }}
+          SHA: ${{ needs.publish.outputs.sha }}
+        run: |
+          .github/scripts/pr-preview.sh comment-failed "$NUMBER" "$SHA" "$RUN_URL"
+          .github/scripts/pr-preview.sh status "$SHA" failure "Preview failed" "$RUN_URL"
+
+      - if: needs.cleanup.outputs.removed != '' && needs.deploy.result == 'success'
         env:
           REMOVED: ${{ needs.cleanup.outputs.removed }}
         run: .github/scripts/pr-preview.sh comment-removed "$REMOVED"
